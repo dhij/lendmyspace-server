@@ -1,22 +1,10 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
-
-	"github.com/gorilla/mux"
+	"github.com/davidhwang-ij/study-platform/routers"
 )
 
 func main() {
-	router := mux.NewRouter()
-	router.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
-		response := map[string]string{
-			"message": "Hello Docker!",
-		}
-		json.NewEncoder(rw).Encode(response)
-	})
-
-	log.Println("Server is running!")
-	http.ListenAndServe(":4000", router)
+	r := routers.InitRouter()
+	r.Run(":8080")
 }
