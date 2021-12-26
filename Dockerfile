@@ -11,11 +11,11 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY ./cmd/dplatform .
+COPY . .
 
 EXPOSE 8080
 
-RUN go build -o main .
+RUN go build -o main ./cmd/dplatform
 
 CMD ./main
 

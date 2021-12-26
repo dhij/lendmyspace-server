@@ -42,3 +42,5 @@ coverage.txt
 
 # Ignore live-reload related files
 tmp
+
+pgdata/
