@@ -1,4 +1,4 @@
-package room
+package domain
 
 import "time"
 
