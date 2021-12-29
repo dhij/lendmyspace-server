@@ -7,7 +7,7 @@ CREATE TABLE "rooms" (
     "host_id" bigint NOT NULL,
     "name" varchar,
     "description" varchar,
-    "participant_id" int,
+    "participant_id" bigint,
     "message_id" bigint,
     "updated_at" timestamptz,
     "created_at" timestamptz DEFAULT (now())
@@ -21,7 +21,7 @@ CREATE TABLE "messages" (
 );
 CREATE TABLE "users" (
     "id" bigserial PRIMARY KEY,
-    "username" varchar NOT NULL,
+    "user_name" varchar NOT NULL,
     "first_name" varchar NOT NULL,
     "last_name" varchar NOT NULL,
     "email" varchar NOT NULL,
