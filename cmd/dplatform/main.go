@@ -22,6 +22,8 @@ func main() {
 	userHandler := http.NewUserHandler(userService)
 
 	r.POST("/signup", userHandler.CreateUser)
+	r.GET("/:user_id", userHandler.GetUser)
+	r.GET("/users", userHandler.ListUsers)
 
 	r.Run(":8080")
 }
