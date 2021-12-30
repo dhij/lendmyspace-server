@@ -4,6 +4,7 @@ import (
 	"dplatform/internal/user/domain"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,4 +37,48 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	fmt.Println("result:", result.FirstName)
 
 	c.JSON(http.StatusOK, result)
+}
+
+func (h *UserHandler) ListUsers(c *gin.Context) {
+	limit, err := strconv.ParseInt(c.Query("limit"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	offset, err := strconv.ParseInt(c.Query("offset"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	arg := domain.ListUsersParams{
+		Limit:  limit,
+		Offset: offset,
+	}
+
+	context := c.Request.Context()
+	users, err := h.UserService.ListUsers(context, arg)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
+}
+
+func (h *UserHandler) GetUser(c *gin.Context) {
+	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	context := c.Request.Context()
+	user, err := h.UserService.GetUser(context, int(userId))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }
