@@ -1,21 +1,13 @@
-FROM golang:latest
-
-ENV GO111MODULE=on \
-    CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
-
+FROM golang:1.17.5-alpine3.15 AS builder
 WORKDIR /app
-
-COPY go.mod go.sum ./
-
-RUN go mod download
-
 COPY . .
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/dplatform
 
-EXPOSE 8080
+FROM alpine:3.15
+RUN apk --no-cache add ca-certificates
+WORKDIR /root
+COPY --from=builder /app/main .
+CMD ["./main"]
 
-RUN go build -o main ./cmd/dplatform
-
-CMD ./main
 
