@@ -38,3 +38,7 @@ ALTER TABLE "rooms"
 ADD FOREIGN KEY ("message_id") REFERENCES "messages" ("id");
 ALTER TABLE "messages"
 ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+CREATE INDEX ON "rooms" ("host_id");
+CREATE INDEX ON "rooms" ("name");
+CREATE INDEX ON "users" ("user_name");
+CREATE INDEX ON "users" ("email");
