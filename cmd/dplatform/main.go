@@ -21,9 +21,11 @@ func main() {
 	userService := service.NewUserSerivce(userRepository)
 	userHandler := http.NewUserHandler(userService)
 
-	r.POST("/signup", userHandler.CreateUser)
-	r.GET("/:user_id", userHandler.GetUser)
+	r.GET("/users/:user_id", userHandler.GetUser)
 	r.GET("/users", userHandler.ListUsers)
+	r.POST("/signup", userHandler.CreateUser)
+	r.PATCH("/users/:user_id", userHandler.UpdateUser)
+	r.DELETE("/users/:user_id", userHandler.DeleteUser)
 
 	r.Run(":8080")
 }
