@@ -16,6 +16,7 @@ type User struct {
 }
 
 type UserInfo struct {
+	ID        int64  `json:"id"`
 	UserName  string `json:"user_name" db:"user_name"`
 	FirstName string `json:"first_name" db:"first_name"`
 	LastName  string `json:"last_name" db:"last_name"`
