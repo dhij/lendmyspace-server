@@ -1,1 +1,1 @@
-# study-platform
+# dplatform
