@@ -1,4 +1,4 @@
-.PHONY: createdb dropdb migrateup migratedown
+.PHONY: createdb dropdb migrateup migratedown postgres
 
 createdb: 
 	docker exec -it dplatform_postgres createdb --username=root --owner=root dplatform

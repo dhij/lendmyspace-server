@@ -15,11 +15,28 @@ type User struct {
 	LastLogin time.Time `json:"last_login" db:"last_login"`
 }
 
+type ListUsersParams struct {
+	Limit  int64 `json:"limit"`
+	Offset int64 `json:"offset"`
+}
+
+type UpdateUserParams struct {
+	ID       int64  `json:"id"`
+	UserName string `json:"user_name"`
+}
+
 type UserRepository interface {
-	CreateUser(ctx context.Context, user *User) (newUser *User, err error)
-	FindByID(ctx context.Context, id int) (user *User, err error)
+	GetUser(ctx context.Context, id int) (*User, error)
+	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	CreateUser(ctx context.Context, arg *User) (*User, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (*User, error)
+	DeleteUser(ctx context.Context, id int) error
 }
 
 type UserService interface {
-	CreateUser(ctx context.Context, user *User) (newUser *User, err error)
+	GetUser(ctx context.Context, id int) (*User, error)
+	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	CreateUser(ctx context.Context, arg *User) (*User, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (*User, error)
+	DeleteUser(ctx context.Context, id int) error
 }
