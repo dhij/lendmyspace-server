@@ -18,7 +18,7 @@ func NewUserSerivce(userRepository domain.UserRepository) domain.UserService {
 	}
 }
 
-func (s *userService) GetUser(c context.Context, id int) (user *domain.User, err error) {
+func (s *userService) GetUser(c context.Context, id int) (user *domain.UserInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -30,7 +30,7 @@ func (s *userService) GetUser(c context.Context, id int) (user *domain.User, err
 	return result, nil
 }
 
-func (s *userService) ListUsers(c context.Context, arg domain.ListUsersParams) ([]domain.User, error) {
+func (s *userService) ListUsers(c context.Context, arg domain.ListUsersParams) ([]domain.UserInfo, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -42,7 +42,7 @@ func (s *userService) ListUsers(c context.Context, arg domain.ListUsersParams) (
 	return result, nil
 }
 
-func (s *userService) CreateUser(c context.Context, arg *domain.User) (newUser *domain.User, err error) {
+func (s *userService) CreateUser(c context.Context, arg *domain.User) (newUser *domain.UserInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -54,7 +54,7 @@ func (s *userService) CreateUser(c context.Context, arg *domain.User) (newUser *
 	return user, nil
 }
 
-func (s *userService) UpdateUser(c context.Context, arg domain.UpdateUserParams) (*domain.User, error) {
+func (s *userService) UpdateUser(c context.Context, arg domain.UpdateUserParams) (*domain.UserInfo, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 	user, err := s.userRepository.UpdateUser(ctx, arg)
