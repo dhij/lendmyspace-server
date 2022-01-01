@@ -1,4 +1,4 @@
-.PHONY: createdb dropdb migrateup migratedown postgres
+.PHONY: createdb dropdb migrateup migratedown postgres test
 
 createdb: 
 	docker exec -it dplatform_postgres createdb --username=root --owner=root dplatform
@@ -14,3 +14,6 @@ migratedown:
 
 postgres:
 	docker run --name dplatform_postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -e POSTGRES_DB=dplatform -d postgres:14-alpine
+
+test:
+	go test -v -cover ./internal/user/repository
