@@ -67,3 +67,18 @@ func (r *userDBRepository) CreateUser(ctx context.Context, user *domain.User) (*
 
 	return r.GetUser(ctx, lastInsertId)
 }
+
+func (r *userDBRepository) UpdateUser(ctx context.Context, arg domain.UpdateUserParams) (*domain.User, error) {
+	lastInsertId := 0
+	err := r.DB.QueryRowxContext(ctx, UpdateUserQuery, arg.ID, arg.UserName).Scan(&lastInsertId)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.GetUser(ctx, lastInsertId)
+}
+
+func (r *userDBRepository) DeleteUser(ctx context.Context, id int) error {
+	_, err := r.DB.ExecContext(ctx, DeleteUserQuery, id)
+	return err
+}
