@@ -19,8 +19,8 @@ func NewUserRepository(db *sqlx.DB) domain.UserRepository {
 	}
 }
 
-func (r *userDBRepository) GetUser(ctx context.Context, id int) (*domain.User, error) {
-	s := domain.User{}
+func (r *userDBRepository) GetUser(ctx context.Context, id int) (*domain.UserInfo, error) {
+	s := domain.UserInfo{}
 	err := r.DB.GetContext(ctx, &s, GetUserQuery, id)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, err
@@ -33,16 +33,16 @@ func (r *userDBRepository) GetUser(ctx context.Context, id int) (*domain.User, e
 	return &s, nil
 }
 
-func (r *userDBRepository) ListUsers(ctx context.Context, arg domain.ListUsersParams) ([]domain.User, error) {
+func (r *userDBRepository) ListUsers(ctx context.Context, arg domain.ListUsersParams) ([]domain.UserInfo, error) {
 	rows, err := r.DB.QueryxContext(ctx, ListUsersQuery, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var items []domain.User
+	var items []domain.UserInfo
 	for rows.Next() {
-		var i domain.User
+		var i domain.UserInfo
 		if err := rows.Scan(&i.UserName, &i.FirstName, &i.LastName, &i.Email); err != nil {
 			return nil, err
 		}
@@ -58,7 +58,7 @@ func (r *userDBRepository) ListUsers(ctx context.Context, arg domain.ListUsersPa
 	return items, nil
 }
 
-func (r *userDBRepository) CreateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
+func (r *userDBRepository) CreateUser(ctx context.Context, user *domain.User) (*domain.UserInfo, error) {
 	lastInsertId := 0
 	err := r.DB.QueryRowxContext(ctx, CreateUserQuery, user.UserName, user.FirstName, user.LastName, user.Email, user.Password).Scan(&lastInsertId)
 	if err != nil {
@@ -68,7 +68,7 @@ func (r *userDBRepository) CreateUser(ctx context.Context, user *domain.User) (*
 	return r.GetUser(ctx, lastInsertId)
 }
 
-func (r *userDBRepository) UpdateUser(ctx context.Context, arg domain.UpdateUserParams) (*domain.User, error) {
+func (r *userDBRepository) UpdateUser(ctx context.Context, arg domain.UpdateUserParams) (*domain.UserInfo, error) {
 	lastInsertId := 0
 	err := r.DB.QueryRowxContext(ctx, UpdateUserQuery, arg.ID, arg.UserName).Scan(&lastInsertId)
 	if err != nil {

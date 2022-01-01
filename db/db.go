@@ -13,12 +13,12 @@ const (
 	maxConnLife  = 5 * time.Minute
 )
 
-type PostgreSQLsqlx struct {
+type PostgreSQL struct {
 	db *sqlx.DB
 }
 
 // NewDatabase make new database connection
-func NewDatabase() (*PostgreSQLsqlx, error) {
+func NewDatabase() (*PostgreSQL, error) {
 	connectionStr := "postgres://root:password@localhost:5432/dplatform?sslmode=disable"
 	db, err := sqlx.Open("postgres", connectionStr)
 	if err != nil {
@@ -29,15 +29,15 @@ func NewDatabase() (*PostgreSQLsqlx, error) {
 	db.SetMaxOpenConns(maxOpenConns)
 	db.SetConnMaxLifetime(maxConnLife)
 
-	return &PostgreSQLsqlx{
+	return &PostgreSQL{
 		db: db,
 	}, nil
 }
 
-func (p *PostgreSQLsqlx) Close() {
+func (p *PostgreSQL) Close() {
 	p.db.Close()
 }
 
-func (p *PostgreSQLsqlx) GetDB() *sqlx.DB {
+func (p *PostgreSQL) GetDB() *sqlx.DB {
 	return p.db
 }
