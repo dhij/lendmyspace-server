@@ -20,14 +20,23 @@ type ListUsersParams struct {
 	Offset int64 `json:"offset"`
 }
 
+type UpdateUserParams struct {
+	ID       int64  `json:"id"`
+	UserName string `json:"user_name"`
+}
+
 type UserRepository interface {
 	GetUser(ctx context.Context, id int) (*User, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
 	CreateUser(ctx context.Context, arg *User) (*User, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (*User, error)
+	DeleteUser(ctx context.Context, id int) error
 }
 
 type UserService interface {
 	GetUser(ctx context.Context, id int) (*User, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
 	CreateUser(ctx context.Context, arg *User) (*User, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (*User, error)
+	DeleteUser(ctx context.Context, id int) error
 }
