@@ -53,3 +53,23 @@ func (s *userService) CreateUser(c context.Context, arg *domain.User) (newUser *
 
 	return user, nil
 }
+
+func (s *userService) UpdateUser(c context.Context, arg domain.UpdateUserParams) (*domain.User, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+	user, err := s.userRepository.UpdateUser(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (s *userService) DeleteUser(c context.Context, id int) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+	err := s.userRepository.DeleteUser(ctx, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
