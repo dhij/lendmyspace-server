@@ -40,7 +40,7 @@ func (r *userDBRepository) ListUsers(ctx context.Context, arg domain.ListUsersPa
 	}
 	defer rows.Close()
 
-	var items []domain.UserInfo
+	items := []domain.UserInfo{}
 	for rows.Next() {
 		var i domain.UserInfo
 		if err := rows.Scan(&i.UserName, &i.FirstName, &i.LastName, &i.Email); err != nil {

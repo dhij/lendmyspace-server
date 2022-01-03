@@ -24,8 +24,8 @@ type UserInfo struct {
 }
 
 type ListUsersParams struct {
-	Limit  int64 `json:"limit"`
-	Offset int64 `json:"offset"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 type UpdateUserParams struct {
