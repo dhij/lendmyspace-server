@@ -1,4 +1,4 @@
-.PHONY: createdb dropdb migrateup migratedown postgres test
+.PHONY: createdb dropdb migrateup migratedown postgres test server
 
 createdb: 
 	docker exec -it dplatform_postgres createdb --username=root --owner=root dplatform
@@ -17,3 +17,6 @@ postgres:
 
 test:
 	go test -v -cover ./internal/user/repository
+
+server:
+	go run cmd/dplatform/main.go

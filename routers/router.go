@@ -1,17 +1,23 @@
 package routers
 
 import (
+	"dplatform/internal/user/http"
+
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
-	r := gin.Default()
+var r *gin.Engine
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+func InitRouter(userHandler *http.UserHandler) {
+	r = gin.Default()
 
-	return r
+	r.GET("/users/:user_id", userHandler.GetUser)
+	r.GET("/users", userHandler.ListUsers)
+	r.POST("/signup", userHandler.CreateUser)
+	r.PATCH("/users/:user_id", userHandler.UpdateUser)
+	r.DELETE("/users/:user_id", userHandler.DeleteUser)
+}
+
+func Start(serverAddress string) error {
+	return r.Run(serverAddress)
 }
