@@ -39,21 +39,20 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+type listUserRequest struct {
+	PageID   int32 `form:"page_id"`
+	PageSize int32 `form:"page_size"`
+}
+
 func (h *UserHandler) ListUsers(c *gin.Context) {
-	limit, err := strconv.ParseInt(c.Query("limit"), 10, 64)
-	if err != nil {
+	var req listUserRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	offset, err := strconv.ParseInt(c.Query("offset"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
 	}
 
 	arg := domain.ListUsersParams{
-		Limit:  limit,
-		Offset: offset,
+		Limit:  req.PageSize,
+		Offset: (req.PageID - 1) * req.PageSize,
 	}
 
 	context := c.Request.Context()
