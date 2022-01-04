@@ -9,17 +9,17 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type roomRepository struct {
+type roomDBRepository struct {
 	DB *sqlx.DB
 }
 
 func NewRoomRepository(db *sqlx.DB) domain.RoomRepository {
-	return &roomRepository{
-		DB: db,
+	return &roomDBRepository{
+		db,
 	}
 }
 
-func (r *roomRepository) GetRoom(ctx context.Context, id int) (*domain.Room, error) {
+func (r *roomDBRepository) GetRoom(ctx context.Context, id int) (*domain.Room, error) {
 	s := domain.Room{}
 	err := r.DB.GetContext(ctx, &s, GetRoomQuery, id)
 	if errors.Is(err, sql.ErrNoRows) {
@@ -33,7 +33,7 @@ func (r *roomRepository) GetRoom(ctx context.Context, id int) (*domain.Room, err
 	return &s, nil
 }
 
-func (r *roomRepository) CreateRoom(ctx context.Context, arg *domain.CreateRoomParams) (*domain.Room, error) {
+func (r *roomDBRepository) CreateRoom(ctx context.Context, arg *domain.CreateRoomParams) (*domain.Room, error) {
 	lastInsertId := 0
 	err := r.DB.QueryRowxContext(ctx, CreateRoomQuery, arg.Name, arg.Description, arg.HostID, arg.ParticipantID, arg.MessageID).Scan(&lastInsertId)
 	if err != nil {
