@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"dplatform/internal/user/domain"
+	"lendmyspace-server/internal/user/domain"
 	"time"
 )
 

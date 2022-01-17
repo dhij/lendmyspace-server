@@ -1,7 +1,7 @@
 package http
 
 import (
-	"dplatform/internal/user/domain"
+	"lendmyspace-server/internal/user/domain"
 	"net/http"
 	"strconv"
 

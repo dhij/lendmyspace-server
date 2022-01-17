@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"dplatform/db"
+	"lendmyspace-server/db"
 	"log"
 	"os"
 	"testing"

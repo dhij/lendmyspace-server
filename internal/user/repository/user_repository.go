@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"dplatform/internal/user/domain"
 	"errors"
+	"lendmyspace-server/internal/user/domain"
 
 	"github.com/jmoiron/sqlx"
 )
