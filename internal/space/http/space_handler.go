@@ -1,49 +1,49 @@
 package http
 
 import (
-	"dplatform/internal/room/domain"
+	"lendmyspace-server/internal/space/domain"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type RoomHandler struct {
-	RoomService domain.RoomService
+type SpaceHandler struct {
+	SpaceService domain.SpaceService
 }
 
-func NewRoomHandler(rs domain.RoomService) *RoomHandler {
-	return &RoomHandler{
-		RoomService: rs,
+func NewSpaceHandler(ss domain.SpaceService) *SpaceHandler {
+	return &SpaceHandler{
+		SpaceService: ss,
 	}
 }
 
-func (h *RoomHandler) GetRoom(c *gin.Context) {
-	roomId, err := strconv.ParseInt(c.Param("room_id"), 10, 64)
+func (h *SpaceHandler) GetSpace(c *gin.Context) {
+	roomId, err := strconv.ParseInt(c.Param("space_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	context := c.Request.Context()
-	user, err := h.RoomService.GetRoom(context, int(roomId))
+	space, err := h.SpaceService.GetSpace(context, int(roomId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, space)
 }
 
-func (h *RoomHandler) CreateRoom(c *gin.Context) {
-	var room domain.CreateRoomParams
+func (h *SpaceHandler) CreateSpace(c *gin.Context) {
+	var room domain.CreateSpaceParams
 	if err := c.ShouldBindJSON(&room); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	context := c.Request.Context()
-	result, saveErr := h.RoomService.CreateRoom(context, &room)
+	result, saveErr := h.SpaceService.CreateSpace(context, &room)
 	if saveErr != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": saveErr.Error()})
 		return
