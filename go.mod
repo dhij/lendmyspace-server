@@ -1,4 +1,4 @@
-module dplatform
+module lendmyspace-server
 
 go 1.17
 

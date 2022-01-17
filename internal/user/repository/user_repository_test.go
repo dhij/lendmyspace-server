@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"dplatform/internal/user/domain"
-	"dplatform/util"
+	"lendmyspace-server/internal/user/domain"
+	"lendmyspace-server/util"
 	"testing"
 
 	"github.com/stretchr/testify/require"

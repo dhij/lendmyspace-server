@@ -1,8 +1,7 @@
 package http
 
 import (
-	"dplatform/internal/user/domain"
-	"fmt"
+	"lendmyspace-server/internal/user/domain"
 	"net/http"
 	"strconv"
 
@@ -33,8 +32,6 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": saveErr.Error()})
 		return
 	}
-
-	fmt.Println("result:", result.FirstName)
 
 	c.JSON(http.StatusOK, result)
 }
