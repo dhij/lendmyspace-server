@@ -19,7 +19,7 @@ type PostgreSQL struct {
 
 // NewDatabase make new database connection
 func NewDatabase() (*PostgreSQL, error) {
-	connectionStr := "postgres://root:password@localhost:5432/dplatform?sslmode=disable"
+	connectionStr := "postgres://root:password@localhost:5432/lendmyspace?sslmode=disable"
 	db, err := sqlx.Open("postgres", connectionStr)
 	if err != nil {
 		return nil, err

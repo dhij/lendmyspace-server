@@ -1,24 +1,18 @@
-CREATE TABLE "topics" (
+CREATE TABLE "spaces" (
     "id" bigserial PRIMARY KEY,
-    "room_id" bigint
-);
-CREATE TABLE "rooms" (
-    "id" bigserial PRIMARY KEY,
-    "host_id" bigint NOT NULL,
     "name" varchar,
     "description" varchar,
-    "participant_id" bigint,
-    "message_id" bigint,
+    "host_id" bigint NOT NULL,
+    "image_id" bigint,
+    "date_id" bigint,
     "updated_at" timestamptz,
     "created_at" timestamptz DEFAULT (now())
 );
-CREATE TABLE "messages" (
+CREATE TABLE "dates" (
     "id" bigserial PRIMARY KEY,
-    "body" varchar NOT NULL,
-    "updated_at" timestamptz,
-    "created_at" timestamptz,
-    "user_id" bigint NOT NULL
+    "available_on" timestamptz
 );
+CREATE TABLE "images" ("id" bigserial PRIMARY KEY, "link" varchar);
 CREATE TABLE "users" (
     "id" bigserial PRIMARY KEY,
     "user_name" varchar NOT NULL,
@@ -28,17 +22,13 @@ CREATE TABLE "users" (
     "password" varchar NOT NULL,
     "last_login" timestamptz
 );
-ALTER TABLE "topics"
-ADD FOREIGN KEY ("room_id") REFERENCES "rooms" ("id");
-ALTER TABLE "rooms"
+ALTER TABLE "spaces"
 ADD FOREIGN KEY ("host_id") REFERENCES "users" ("id");
-ALTER TABLE "rooms"
-ADD FOREIGN KEY ("participant_id") REFERENCES "users" ("id");
-ALTER TABLE "rooms"
-ADD FOREIGN KEY ("message_id") REFERENCES "messages" ("id");
-ALTER TABLE "messages"
-ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-CREATE INDEX ON "rooms" ("host_id");
-CREATE INDEX ON "rooms" ("name");
+ALTER TABLE "spaces"
+ADD FOREIGN KEY ("image_id") REFERENCES "images" ("id");
+ALTER TABLE "spaces"
+ADD FOREIGN KEY ("date_id") REFERENCES "dates" ("id");
+CREATE INDEX ON "spaces" ("host_id");
+CREATE INDEX ON "spaces" ("name");
 CREATE INDEX ON "users" ("user_name");
 CREATE INDEX ON "users" ("email");
