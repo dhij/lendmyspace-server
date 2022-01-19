@@ -17,12 +17,12 @@ type Space struct {
 }
 
 type CreateSpaceParams struct {
-	ID          int64   `json:"id"`
-	Name        *string `json:"name" db:"name"`
-	Description *string `json:"description" db:"description"`
-	HostID      int64   `json:"host_id" db:"host_id"`
-	ImageID     *int64  `json:"image_id" db:"image_id"`
-	DateID      *int64  `json:"date_id" db:"date_id"`
+	ID          int64    `json:"id"`
+	Name        *string  `json:"name"`
+	Description *string  `json:"description"`
+	Dates       []string `json:"dates"`
+	HostID      int64    `json:"host_id"`
+	ImageID     *int64   `json:"image_id"`
 }
 
 type SpaceService interface {
