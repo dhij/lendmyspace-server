@@ -35,7 +35,7 @@ func (r *spaceDBRepository) GetSpace(ctx context.Context, id int) (*domain.Space
 
 func (r *spaceDBRepository) CreateSpace(ctx context.Context, arg *domain.CreateSpaceParams) (*domain.Space, error) {
 	lastInsertId := 0
-	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.HostID, arg.ImageID, arg.DateID).Scan(&lastInsertId)
+	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.HostID, arg.ImageID, nil).Scan(&lastInsertId)
 	if err != nil {
 		return nil, err
 	}
