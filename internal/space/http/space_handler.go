@@ -36,14 +36,14 @@ func (h *SpaceHandler) GetSpace(c *gin.Context) {
 }
 
 func (h *SpaceHandler) CreateSpace(c *gin.Context) {
-	var room domain.CreateSpaceParams
-	if err := c.ShouldBindJSON(&room); err != nil {
+	var space domain.CreateSpaceParams
+	if err := c.ShouldBindJSON(&space); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	context := c.Request.Context()
-	result, saveErr := h.SpaceService.CreateSpace(context, &room)
+	result, saveErr := h.SpaceService.CreateSpace(context, &space)
 	if saveErr != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": saveErr.Error()})
 		return
