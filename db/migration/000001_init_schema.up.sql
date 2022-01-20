@@ -2,6 +2,8 @@ CREATE TABLE "spaces" (
     "id" bigserial PRIMARY KEY,
     "name" varchar,
     "description" varchar,
+    "location" varchar,
+    "link" varchar,
     "host_id" bigint NOT NULL,
     "image_id" bigint,
     "date_id" bigint,
