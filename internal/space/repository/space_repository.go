@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"lendmyspace-server/internal/space/domain"
+	"lendmyspace-server/util"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -35,7 +36,7 @@ func (r *spaceDBRepository) GetSpace(ctx context.Context, id int) (*domain.Space
 
 func (r *spaceDBRepository) CreateSpace(ctx context.Context, arg *domain.CreateSpaceParams) (*domain.Space, error) {
 	lastInsertId := 0
-	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.HostID, arg.ImageID, nil).Scan(&lastInsertId)
+	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.Location, util.RandomLink("davidhwang_ij"), arg.HostID, arg.ImageID, nil).Scan(&lastInsertId)
 	if err != nil {
 		return nil, err
 	}
