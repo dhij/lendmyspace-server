@@ -30,10 +30,12 @@ type CreateSpaceParams struct {
 
 type SpaceService interface {
 	GetSpace(ctx context.Context, id int) (*Space, error)
+	ListSpaces(ctx context.Context) ([]Space, error)
 	CreateSpace(ctx context.Context, arg *CreateSpaceParams) (*Space, error)
 }
 
 type SpaceRepository interface {
 	GetSpace(ctx context.Context, id int) (*Space, error)
+	ListSpaces(ctx context.Context) ([]Space, error)
 	CreateSpace(ctx context.Context, arg *CreateSpaceParams) (*Space, error)
 }

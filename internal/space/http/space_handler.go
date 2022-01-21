@@ -35,6 +35,17 @@ func (h *SpaceHandler) GetSpace(c *gin.Context) {
 	c.JSON(http.StatusOK, space)
 }
 
+func (h *SpaceHandler) ListSpaces(c *gin.Context) {
+	context := c.Request.Context()
+	users, err := h.SpaceService.ListSpaces(context)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
+}
+
 func (h *SpaceHandler) CreateSpace(c *gin.Context) {
 	var space domain.CreateSpaceParams
 	if err := c.ShouldBindJSON(&space); err != nil {
