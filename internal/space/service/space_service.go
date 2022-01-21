@@ -31,6 +31,18 @@ func (s *spaceService) GetSpace(c context.Context, id int) (*domain.Space, error
 	return result, nil
 }
 
+func (s *spaceService) ListSpaces(c context.Context) ([]domain.Space, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	result, err := s.spaceRepository.ListSpaces(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func (s *spaceService) CreateSpace(c context.Context, arg *domain.CreateSpaceParams) (*domain.Space, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()

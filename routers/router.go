@@ -33,6 +33,7 @@ func InitRouter(userHandler *http.UserHandler, spaceHandler *http2.SpaceHandler)
 	r.DELETE("/users/:user_id", userHandler.DeleteUser)
 
 	r.GET("/spaces/:space_id", spaceHandler.GetSpace)
+	r.GET("/spaces", spaceHandler.ListSpaces)
 	r.POST("/create_space", spaceHandler.CreateSpace)
 }
 
