@@ -5,26 +5,20 @@ CREATE TABLE "spaces" (
     "location" varchar,
     "link" varchar,
     "host_id" bigint NOT NULL,
-    "image_id" bigint,
-    "dates" TEXT [],
+    "images" text [],
+    "dates" text [],
     "updated_at" timestamptz,
     "created_at" timestamptz DEFAULT (now())
 );
-CREATE TABLE "images" ("id" bigserial PRIMARY KEY, "link" varchar);
 CREATE TABLE "users" (
     "id" bigserial PRIMARY KEY,
     "user_name" varchar NOT NULL,
     "first_name" varchar NOT NULL,
     "last_name" varchar NOT NULL,
-    "email" varchar NOT NULL,
+    "email" varchar UNIQUE NOT NULL,
     "password" varchar NOT NULL,
-    "last_login" timestamptz
+    "password_changed_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00Z',
+    "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 ALTER TABLE "spaces"
 ADD FOREIGN KEY ("host_id") REFERENCES "users" ("id");
-ALTER TABLE "spaces"
-ADD FOREIGN KEY ("image_id") REFERENCES "images" ("id");
-CREATE INDEX ON "spaces" ("host_id");
-CREATE INDEX ON "spaces" ("name");
-CREATE INDEX ON "users" ("user_name");
-CREATE INDEX ON "users" ("email");
