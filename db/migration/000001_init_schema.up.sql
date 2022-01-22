@@ -6,13 +6,9 @@ CREATE TABLE "spaces" (
     "link" varchar,
     "host_id" bigint NOT NULL,
     "image_id" bigint,
-    "date_id" bigint,
+    "dates" TEXT [],
     "updated_at" timestamptz,
     "created_at" timestamptz DEFAULT (now())
-);
-CREATE TABLE "dates" (
-    "id" bigserial PRIMARY KEY,
-    "available_on" timestamptz
 );
 CREATE TABLE "images" ("id" bigserial PRIMARY KEY, "link" varchar);
 CREATE TABLE "users" (
@@ -28,8 +24,6 @@ ALTER TABLE "spaces"
 ADD FOREIGN KEY ("host_id") REFERENCES "users" ("id");
 ALTER TABLE "spaces"
 ADD FOREIGN KEY ("image_id") REFERENCES "images" ("id");
-ALTER TABLE "spaces"
-ADD FOREIGN KEY ("date_id") REFERENCES "dates" ("id");
 CREATE INDEX ON "spaces" ("host_id");
 CREATE INDEX ON "spaces" ("name");
 CREATE INDEX ON "users" ("user_name");
