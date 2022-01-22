@@ -8,6 +8,7 @@ import (
 	"lendmyspace-server/util"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 )
 
 type spaceDBRepository struct {
@@ -61,7 +62,7 @@ func (r *spaceDBRepository) ListSpaces(ctx context.Context) ([]domain.Space, err
 
 func (r *spaceDBRepository) CreateSpace(ctx context.Context, arg *domain.CreateSpaceParams) (*domain.Space, error) {
 	lastInsertId := 0
-	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.Location, util.RandomLink("davidhwang_ij"), arg.HostID, arg.ImageID, nil).Scan(&lastInsertId)
+	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.Location, util.RandomLink("davidhwang_ij"), arg.HostID, arg.ImageID, pq.Array(arg.Dates)).Scan(&lastInsertId)
 	if err != nil {
 		return nil, err
 	}
