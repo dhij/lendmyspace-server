@@ -13,11 +13,15 @@ import (
 var userRepository domain.UserRepository
 
 func createRandomUser(t *testing.T) *domain.UserInfo {
+	hashedPassword, err := util.HashPassword(util.RandomString(6))
+	require.NoError(t, err)
+
 	arg := domain.User{
 		UserName:  util.RandomUser(),
 		FirstName: util.RandomFirstName(),
 		LastName:  util.RandomLastName(),
 		Email:     util.RandomEmail(),
+		Password:  hashedPassword,
 	}
 
 	userRepository = NewUserRepository(dbSQLX.GetDB())

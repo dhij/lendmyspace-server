@@ -2,10 +2,12 @@ package http
 
 import (
 	"lendmyspace-server/internal/user/domain"
+	"lendmyspace-server/util"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 )
 
 type UserHandler struct {
@@ -18,18 +20,45 @@ func NewUserHandler(us domain.UserService) *UserHandler {
 	}
 }
 
+type createUserRequest struct {
+	Username  string `json:"user_name" binding:"required,alphanum"`
+	FirstName string `json:"first_name" binding:"required"`
+	LastName  string `json:"last_name" binding:"required"`
+	Email     string `json:"email" binding:"required"`
+	Password  string `json:"password" binding:"required"`
+}
+
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var user domain.User
+	var user createUserRequest
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	hashedPassword, err := util.HashPassword(user.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	arg := domain.User{
+		UserName:  user.Username,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Password:  hashedPassword,
+	}
+
 	context := c.Request.Context()
-	result, saveErr := h.UserService.CreateUser(context, &user)
+	result, saveErr := h.UserService.CreateUser(context, &arg)
 	if saveErr != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": saveErr.Error()})
+		if pqErr, ok := saveErr.(*pq.Error); ok {
+			if pqErr.Code.Name() == "unique_violation" {
+				c.JSON(http.StatusForbidden, err)
+			}
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": saveErr.Error()})
 		return
 	}
 
