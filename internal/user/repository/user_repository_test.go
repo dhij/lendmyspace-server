@@ -57,14 +57,8 @@ func TestListUsers(t *testing.T) {
 		createRandomUser(t)
 	}
 
-	arg := domain.ListUsersParams{
-		Limit:  5,
-		Offset: 5,
-	}
-
-	users, err := userRepository.ListUsers(context.Background(), arg)
+	users, err := userRepository.ListUsers(context.Background())
 	require.NoError(t, err)
-	require.Len(t, users, 5)
 
 	for _, user := range users {
 		require.NotEmpty(t, user)

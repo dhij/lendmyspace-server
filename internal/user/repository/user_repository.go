@@ -33,29 +33,14 @@ func (r *userDBRepository) GetUser(ctx context.Context, id int) (*domain.UserInf
 	return &s, nil
 }
 
-func (r *userDBRepository) ListUsers(ctx context.Context, arg domain.ListUsersParams) ([]domain.UserInfo, error) {
-	rows, err := r.DB.QueryxContext(ctx, ListUsersQuery, arg.Limit, arg.Offset)
+func (r *userDBRepository) ListUsers(ctx context.Context) ([]domain.UserInfo, error) {
+	users := []domain.UserInfo{}
+	err := r.DB.SelectContext(ctx, &users, ListUsersQuery)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	items := []domain.UserInfo{}
-	for rows.Next() {
-		var i domain.UserInfo
-		if err := rows.Scan(&i.UserName, &i.FirstName, &i.LastName, &i.Email); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return items, nil
+	return users, nil
 }
 
 func (r *userDBRepository) CreateUser(ctx context.Context, user *domain.User) (*domain.UserInfo, error) {

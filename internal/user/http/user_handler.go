@@ -36,24 +36,9 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-type listUserRequest struct {
-	PageID   int32 `form:"page_id"`
-	PageSize int32 `form:"page_size"`
-}
-
 func (h *UserHandler) ListUsers(c *gin.Context) {
-	var req listUserRequest
-	if err := c.ShouldBindQuery(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-
-	arg := domain.ListUsersParams{
-		Limit:  req.PageSize,
-		Offset: (req.PageID - 1) * req.PageSize,
-	}
-
 	context := c.Request.Context()
-	users, err := h.UserService.ListUsers(context, arg)
+	users, err := h.UserService.ListUsers(context)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

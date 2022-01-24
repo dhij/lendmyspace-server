@@ -23,11 +23,6 @@ type UserInfo struct {
 	Email     string `json:"email" db:"email"`
 }
 
-type ListUsersParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
-}
-
 type UpdateUserParams struct {
 	ID       int64  `json:"id"`
 	UserName string `json:"user_name"`
@@ -35,7 +30,7 @@ type UpdateUserParams struct {
 
 type UserRepository interface {
 	GetUser(ctx context.Context, id int) (*UserInfo, error)
-	ListUsers(ctx context.Context, arg ListUsersParams) ([]UserInfo, error)
+	ListUsers(ctx context.Context) ([]UserInfo, error)
 	CreateUser(ctx context.Context, arg *User) (*UserInfo, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (*UserInfo, error)
 	DeleteUser(ctx context.Context, id int) error
@@ -43,7 +38,7 @@ type UserRepository interface {
 
 type UserService interface {
 	GetUser(ctx context.Context, id int) (*UserInfo, error)
-	ListUsers(ctx context.Context, arg ListUsersParams) ([]UserInfo, error)
+	ListUsers(ctx context.Context) ([]UserInfo, error)
 	CreateUser(ctx context.Context, arg *User) (*UserInfo, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (*UserInfo, error)
 	DeleteUser(ctx context.Context, id int) error

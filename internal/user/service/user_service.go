@@ -30,11 +30,11 @@ func (s *userService) GetUser(c context.Context, id int) (user *domain.UserInfo,
 	return result, nil
 }
 
-func (s *userService) ListUsers(c context.Context, arg domain.ListUsersParams) ([]domain.UserInfo, error) {
+func (s *userService) ListUsers(c context.Context) ([]domain.UserInfo, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	result, err := s.userRepository.ListUsers(ctx, arg)
+	result, err := s.userRepository.ListUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
