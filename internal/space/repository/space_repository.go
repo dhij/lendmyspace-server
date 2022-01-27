@@ -36,33 +36,18 @@ func (r *spaceDBRepository) GetSpace(ctx context.Context, id int) (*domain.Space
 }
 
 func (r *spaceDBRepository) ListSpaces(ctx context.Context) ([]domain.Space, error) {
-	rows, err := r.DB.QueryxContext(ctx, ListSpacesQuery)
+	spaces := []domain.Space{}
+	err := r.DB.SelectContext(ctx, &spaces, ListSpacesQuery)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	items := []domain.Space{}
-	for rows.Next() {
-		var i domain.Space
-		if err := rows.Scan(&i.ID, &i.Name, &i.Description, &i.Location, &i.Link); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return items, nil
+	return spaces, nil
 }
 
 func (r *spaceDBRepository) CreateSpace(ctx context.Context, arg *domain.CreateSpaceParams) (*domain.Space, error) {
 	lastInsertId := 0
-	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.Location, util.RandomLink("davidhwang_ij"), arg.HostID, arg.ImageID, pq.Array(arg.Dates)).Scan(&lastInsertId)
+	err := r.DB.QueryRowxContext(ctx, CreateSpaceQuery, arg.Name, arg.Description, arg.Location, util.RandomLink("davidhwang_ij"), arg.HostID, pq.Array(arg.Images), pq.Array(arg.Dates)).Scan(&lastInsertId)
 	if err != nil {
 		return nil, err
 	}

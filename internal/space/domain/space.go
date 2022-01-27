@@ -14,7 +14,7 @@ type Space struct {
 	Location    *string        `json:"location" db:"location"`
 	Link        *string        `json:"link" db:"link"`
 	HostID      int64          `json:"host_id" db:"host_id"`
-	ImageID     *int64         `json:"image_id" db:"image_id"`
+	Images      pq.StringArray `json:"images" db:"images"`
 	Dates       pq.StringArray `json:"dates" db:"dates"`
 	CreatedAt   time.Time      `json:"createdAt" db:"created_at"`
 	UpdatedAt   *time.Time     `json:"updatedAt" db:"updated_at"`
@@ -25,9 +25,9 @@ type CreateSpaceParams struct {
 	Name        *string  `json:"name"`
 	Description *string  `json:"description"`
 	Location    *string  `json:"location"`
-	Dates       []string `json:"dates"`
 	HostID      int64    `json:"host_id"`
-	ImageID     *int64   `json:"image_id"`
+	Images      []string `json:"images"`
+	Dates       []string `json:"dates"`
 }
 
 type SpaceService interface {

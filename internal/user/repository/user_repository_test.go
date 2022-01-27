@@ -13,11 +13,15 @@ import (
 var userRepository domain.UserRepository
 
 func createRandomUser(t *testing.T) *domain.UserInfo {
+	hashedPassword, err := util.HashPassword(util.RandomString(6))
+	require.NoError(t, err)
+
 	arg := domain.User{
 		UserName:  util.RandomUser(),
 		FirstName: util.RandomFirstName(),
 		LastName:  util.RandomLastName(),
 		Email:     util.RandomEmail(),
+		Password:  hashedPassword,
 	}
 
 	userRepository = NewUserRepository(dbSQLX.GetDB())
@@ -57,14 +61,8 @@ func TestListUsers(t *testing.T) {
 		createRandomUser(t)
 	}
 
-	arg := domain.ListUsersParams{
-		Limit:  5,
-		Offset: 5,
-	}
-
-	users, err := userRepository.ListUsers(context.Background(), arg)
+	users, err := userRepository.ListUsers(context.Background())
 	require.NoError(t, err)
-	require.Len(t, users, 5)
 
 	for _, user := range users {
 		require.NotEmpty(t, user)
