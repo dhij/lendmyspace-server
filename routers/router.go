@@ -28,6 +28,7 @@ func InitRouter(userHandler *http.UserHandler, spaceHandler *http2.SpaceHandler)
 
 	r.GET("/users/:user_id", userHandler.GetUser)
 	r.GET("/users", userHandler.ListUsers)
+	r.POST("/users/login", userHandler.LoginUser)
 	r.POST("/signup", userHandler.CreateUser)
 	r.PATCH("/users/:user_id", userHandler.UpdateUser)
 	r.DELETE("/users/:user_id", userHandler.DeleteUser)

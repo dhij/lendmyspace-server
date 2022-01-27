@@ -1,10 +1,13 @@
 package http
 
 import (
+	"database/sql"
 	"lendmyspace-server/internal/user/domain"
+	"lendmyspace-server/token"
 	"lendmyspace-server/util"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
@@ -17,6 +20,16 @@ type UserHandler struct {
 func NewUserHandler(us domain.UserService) *UserHandler {
 	return &UserHandler{
 		UserService: us,
+	}
+}
+
+func newUserResponse(user *domain.User) *domain.UserInfo {
+	return &domain.UserInfo{
+		ID:        user.ID,
+		UserName:  user.UserName,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
 	}
 }
 
@@ -129,4 +142,45 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+}
+
+func (h *UserHandler) LoginUser(c *gin.Context) {
+	var req domain.LoginUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	context := c.Request.Context()
+	user, err := h.UserService.GetUserByEmail(context, req.Email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = util.CheckPassword(req.Password, user.Password)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+	}
+
+	tokenMaker, err := token.NewPasetoMaker("12345678901234567890123456789012")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var timeout time.Duration = 15
+	accessToken, err := tokenMaker.CreateToken(user.UserName, timeout*time.Minute)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp := domain.LoginUserResponse{
+		AccessToken: accessToken,
+		User:        newUserResponse(user),
+	}
+
+	c.JSON(http.StatusOK, resp)
 }

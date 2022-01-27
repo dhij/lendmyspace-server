@@ -33,6 +33,20 @@ func (r *userDBRepository) GetUser(ctx context.Context, id int) (*domain.UserInf
 	return &s, nil
 }
 
+func (r *userDBRepository) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
+	s := domain.User{}
+	err := r.DB.GetContext(ctx, &s, GetUserByEmailQuery, email)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, err
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &s, nil
+}
+
 func (r *userDBRepository) ListUsers(ctx context.Context) ([]domain.UserInfo, error) {
 	users := []domain.UserInfo{}
 	err := r.DB.SelectContext(ctx, &users, ListUsersQuery)

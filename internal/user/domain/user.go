@@ -28,8 +28,19 @@ type UpdateUserParams struct {
 	UserName string `json:"user_name"`
 }
 
+type LoginUserRequest struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required,min=6"`
+}
+
+type LoginUserResponse struct {
+	AccessToken string    `json:"access_token"`
+	User        *UserInfo `json:"user"`
+}
+
 type UserRepository interface {
 	GetUser(ctx context.Context, id int) (*UserInfo, error)
+	GetUserByEmail(ctx context.Context, email string) (*User, error)
 	ListUsers(ctx context.Context) ([]UserInfo, error)
 	CreateUser(ctx context.Context, arg *User) (*UserInfo, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (*UserInfo, error)
@@ -38,6 +49,7 @@ type UserRepository interface {
 
 type UserService interface {
 	GetUser(ctx context.Context, id int) (*UserInfo, error)
+	GetUserByEmail(c context.Context, email string) (user *User, err error)
 	ListUsers(ctx context.Context) ([]UserInfo, error)
 	CreateUser(ctx context.Context, arg *User) (*UserInfo, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (*UserInfo, error)
