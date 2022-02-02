@@ -1,55 +1,58 @@
 package repository
 
-// import (
-// 	"context"
-// 	"lendmyspace-server/util"
-// 	"testing"
+import (
+	"context"
+	"lendmyspace-server/internal/space/domain"
+	"lendmyspace-server/util"
+	"testing"
 
-// 	"github.com/stretchr/testify/require"
-// )
+	"github.com/stretchr/testify/require"
+)
 
-// var roomRepository domain.RoomRepository
+var spaceRepository domain.SpaceRepository
 
-// func createRandomRoom(t *testing.T) *domain.Room {
-// 	rs := util.RandomString(6)
-// 	description := util.RandomString(20)
-// 	var pid int64 = 3
+func createRandomSpace(t *testing.T) *domain.Space {
+	rs := util.RandomString(6)
+	description := util.RandomString(20)
 
-// 	arg := domain.CreateRoomParams{
-// 		Name:          &rs,
-// 		Description:   &description,
-// 		HostID:        1,
-// 		ParticipantID: &pid,
-// 	}
+	arg := domain.CreateSpaceParams{
+		Name:        &rs,
+		Description: &description,
+		HostID:      1,
+		Images:      util.RandomSlice(3),
+		Dates:       util.RandomSlice(3),
+	}
 
-// 	roomRepository = NewRoomRepository(dbSQLX.GetDB())
-// 	room, err := roomRepository.CreateRoom(context.Background(), &arg)
-// 	require.NoError(t, err)
-// 	require.NotEmpty(t, room)
+	spaceRepository = NewSpaceRepository(dbSQLX.GetDB())
+	space, err := spaceRepository.CreateSpace(context.Background(), &arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, space)
 
-// 	require.Equal(t, arg.Name, room.Name)
-// 	require.Equal(t, arg.Description, room.Description)
-// 	require.Equal(t, arg.HostID, room.HostID)
-// 	require.Equal(t, arg.ParticipantID, room.ParticipantID)
+	require.Equal(t, arg.Name, space.Name)
+	require.Equal(t, arg.Description, space.Description)
+	require.Equal(t, arg.HostID, space.HostID)
+	require.Equal(t, arg.Images, []string(space.Images))
+	require.Equal(t, arg.Dates, []string(space.Dates))
 
-// 	require.NotZero(t, room.ID)
-// 	return room
-// }
+	require.NotZero(t, space.ID)
+	return space
+}
 
-// func TestCreateRoom(t *testing.T) {
-// 	createRandomRoom(t)
-// }
+func TestCreateSpace(t *testing.T) {
+	createRandomSpace(t)
+}
 
-// func TestGetRoom(t *testing.T) {
-// 	room1 := createRandomRoom(t)
+func TestGetSpace(t *testing.T) {
+	space1 := createRandomSpace(t)
 
-// 	room2, err := roomRepository.GetRoom(context.Background(), int(room1.ID))
-// 	require.NoError(t, err)
-// 	require.NotEmpty(t, room2)
+	space2, err := spaceRepository.GetSpace(context.Background(), int(space1.ID))
+	require.NoError(t, err)
+	require.NotEmpty(t, space2)
 
-// 	require.Equal(t, room1.ID, room2.ID)
-// 	require.Equal(t, room1.Name, room2.Name)
-// 	require.Equal(t, room1.Description, room2.Description)
-// 	require.Equal(t, room1.HostID, room2.HostID)
-// 	require.Equal(t, room1.ParticipantID, room2.ParticipantID)
-// }
+	require.Equal(t, space1.ID, space2.ID)
+	require.Equal(t, space1.Name, space2.Name)
+	require.Equal(t, space1.Description, space2.Description)
+	require.Equal(t, space1.HostID, space2.HostID)
+	require.Equal(t, space1.Images, space2.Images)
+	require.Equal(t, space1.Dates, space2.Dates)
+}

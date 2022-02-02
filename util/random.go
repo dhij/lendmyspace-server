@@ -67,3 +67,11 @@ func RandomLink(username string) string {
 
 	return sb.String()
 }
+
+func RandomSlice(n int) []string {
+	s := make([]string, n)
+	for i := 0; i < n; i++ {
+		s[i] = RandomString(6)
+	}
+	return s
+}
