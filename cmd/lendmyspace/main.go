@@ -9,12 +9,18 @@ import (
 	"lendmyspace-server/internal/user/repository"
 	"lendmyspace-server/internal/user/service"
 	"lendmyspace-server/routers"
+	"lendmyspace-server/util"
 
 	"log"
 )
 
 func main() {
-	dbSQLX, err := db.NewDatabase()
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+
+	dbSQLX, err := db.NewDatabase(config)
 	if err != nil {
 		log.Fatalf("Could not initialize Database connection using sqlx %s", err)
 	}
@@ -29,7 +35,7 @@ func main() {
 	spaceHandler := http2.NewSpaceHandler(spaceService)
 
 	routers.InitRouter(userHandler, spaceHandler)
-	err = routers.Start("0.0.0.0:8080")
+	err = routers.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("Could not start server:", err)
 	}

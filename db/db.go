@@ -1,6 +1,7 @@
 package db
 
 import (
+	"lendmyspace-server/util"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -18,9 +19,9 @@ type PostgreSQL struct {
 }
 
 // NewDatabase make new database connection
-func NewDatabase() (*PostgreSQL, error) {
-	connectionStr := "postgres://root:password@localhost:5432/lendmyspace?sslmode=disable"
-	db, err := sqlx.Open("postgres", connectionStr)
+func NewDatabase(config util.Config) (*PostgreSQL, error) {
+	connectionStr := config.DBSource
+	db, err := sqlx.Open(config.DBDriver, connectionStr)
 	if err != nil {
 		return nil, err
 	}
