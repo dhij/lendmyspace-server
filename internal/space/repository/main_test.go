@@ -2,6 +2,7 @@ package repository
 
 import (
 	"lendmyspace-server/db"
+	"lendmyspace-server/util"
 	"log"
 	"os"
 	"testing"
@@ -10,8 +11,12 @@ import (
 var dbSQLX *db.PostgreSQL
 
 func TestMain(m *testing.M) {
-	var err error
-	dbSQLX, err = db.NewDatabase()
+	config, err := util.LoadConfig("../../../")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+
+	dbSQLX, err = db.NewDatabase(config)
 	if err != nil {
 		log.Fatalf("Could not initialize Database connection using sqlx %s", err)
 	}
