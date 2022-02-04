@@ -1,4 +1,4 @@
-name: ci-lendmyspace
+name: Run unit tests
 
 on:
   push:
