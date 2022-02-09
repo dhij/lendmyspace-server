@@ -3,7 +3,7 @@
 ## Purpose
 
 - Implement Domain Driven Architecture
-- Learn CI/CD with Github Action
+- Learn CI/CD with Github Actions
 - Push the image to ECR and deploy on EKS
 
 ## Tech stack
