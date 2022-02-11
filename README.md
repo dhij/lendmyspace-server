@@ -1,10 +1,9 @@
 # LendMySpace API
 
-## Purpose
+## Learning Objectives
 
 - Implement Domain Driven Architecture
-- Learn CI/CD with Github Actions
-- Push the image to ECR and deploy on EKS
+- Push the image to ECR and deploy on EKS through Github Actions
 
 ## Tech stack
 
